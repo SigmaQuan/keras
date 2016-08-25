@@ -215,13 +215,13 @@ model_weight_file = "babi_memnn_weights.hdf5"
 
 answer.fit([inputs_train, queries_train, inputs_train], answers_train,
            batch_size=32,
-           nb_epoch=10,
+           nb_epoch=120,
            validation_split=0.05)
 
-print "save weights of model"
-answer.save_weights(model_weight_file)
+print("save weights of model")
+answer.save_weights(model_weight_file, overwrite=True)
 
-print ""
+print("model architecture")
 plot(answer, to_file="model.png")
 
 loss, acc = answer.evaluate([inputs_test, queries_test, inputs_test], answers_test)
