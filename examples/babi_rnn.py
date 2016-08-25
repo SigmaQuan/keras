@@ -155,11 +155,11 @@ except:
     raise
 tar = tarfile.open(path)
 # Default QA1 with 1000 samples
-# challenge = 'tasks_1-20_v1-2/en/qa1_single-supporting-fact_{}.txt'
+challenge = 'tasks_1-20_v1-2/en/qa1_single-supporting-fact_{}.txt'
 # QA1 with 10,000 samples
 # challenge = 'tasks_1-20_v1-2/en-10k/qa1_single-supporting-fact_{}.txt'
 # QA2 with 1000 samples
-challenge = 'tasks_1-20_v1-2/en/qa2_two-supporting-facts_{}.txt'
+# challenge = 'tasks_1-20_v1-2/en/qa2_two-supporting-facts_{}.txt'
 # QA2 with 10,000 samples
 # challenge = 'tasks_1-20_v1-2/en-10k/qa2_two-supporting-facts_{}.txt'
 train = get_stories(tar.extractfile(challenge.format('train')))
@@ -196,7 +196,8 @@ qrnn.add(RNN(EMBED_HIDDEN_SIZE, return_sequences=False))
 qrnn.add(RepeatVector(story_maxlen))
 
 model = Sequential()
-model.add(Merge([sentrnn, qrnn], mode='sum'))
+# model.add(Merge([sentrnn, qrnn], mode='sum'))
+model.add(Merge([sentrnn, qrnn], mode='concat'))
 model.add(RNN(EMBED_HIDDEN_SIZE, return_sequences=False))
 model.add(Dropout(0.3))
 model.add(Dense(vocab_size, activation='softmax'))

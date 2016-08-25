@@ -165,7 +165,7 @@ class ProgbarLogger(Callback):
 
     def on_epoch_begin(self, epoch, logs={}):
         if self.verbose:
-            print('Epoch %d/%d' % (epoch + 1, self.nb_epoch))
+            print('%s Epoch %d/%d' % (time.strftime('%Y-%m-%d %H:%M:%S'), epoch + 1, self.nb_epoch))
             self.progbar = Progbar(target=self.params['nb_sample'],
                                    verbose=self.verbose)
         self.seen = 0

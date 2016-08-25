@@ -25,6 +25,7 @@ import tarfile
 import numpy as np
 import re
 
+from keras.utils.visualize_util import plot
 
 def tokenize(sent):
     '''Return the tokens of a sentence including punctuation.
@@ -203,7 +204,25 @@ answer.add(Activation('softmax'))
 answer.compile(optimizer='rmsprop', loss='categorical_crossentropy',
                metrics=['accuracy'])
 # Note: you could use a Graph model to avoid repeat the input twice
+# answer.fit([inputs_train, queries_train, inputs_train], answers_train,
+#            batch_size=32,
+#            nb_epoch=120,
+#            validation_data=([inputs_test, queries_test, inputs_test], answers_test))
+
+model_weight_file = "babi_memnn_weights.hdf5"
+# model_memnn = answer
+# model_memnn.load_weights(model_weight_file)
+
 answer.fit([inputs_train, queries_train, inputs_train], answers_train,
            batch_size=32,
-           nb_epoch=120,
-           validation_data=([inputs_test, queries_test, inputs_test], answers_test))
+           nb_epoch=10,
+           validation_split=0.05)
+
+print "save weights of model"
+answer.save_weights(model_weight_file)
+
+print ""
+plot(answer, to_file="model.png")
+
+loss, acc = answer.evaluate([inputs_test, queries_test, inputs_test], answers_test)
+print('Test loss / test accuracy = {:.4f} / {:.4f}'.format(loss, acc))
